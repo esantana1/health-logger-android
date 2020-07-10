@@ -1,16 +1,23 @@
 package com.ekproductions.healthlogger.database.tables;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 @Entity(tableName = "user_setting")
 public class UserSetting {
+    @PrimaryKey
+    @NonNull
     private String userName;
     private float currentWeight;
     private int dailyCaloriesGoal;
     private float weightGoal;
     private boolean isFirstTime;
 
-    public UserSetting(String userName, float currentWeight, float weightGoal, int dailyCaloriesGoal ) {
+    @Ignore
+    public UserSetting(@NonNull String userName, float currentWeight, float weightGoal, int dailyCaloriesGoal ) {
         this.currentWeight = currentWeight;
         this.dailyCaloriesGoal = dailyCaloriesGoal;
         this.weightGoal = weightGoal;
@@ -18,13 +25,19 @@ public class UserSetting {
         this.isFirstTime = false;
     }
 
+    public UserSetting(@NonNull String userName){
+        this.userName = userName;
+        this.isFirstTime = true;
+    }
+
     public UserSetting getUserSetting(){return this;}
 
+    @NonNull
     public String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public void setUserName(@NonNull String userName) {
         this.userName = userName;
     }
 
