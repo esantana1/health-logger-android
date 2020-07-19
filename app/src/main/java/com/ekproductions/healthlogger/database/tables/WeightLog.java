@@ -13,14 +13,22 @@ public class WeightLog {
     private long id;
     private float weight;
     private Date date;
-    //TODO: how to store Image?
+    //TODO: Bonus: how to store Image?
     //private ?? image;
 
+    /**
+     * Constructor Used by Room API. Do do use in backend
+     */
     public WeightLog(long id, float weight, Date date) {
         this.id = id;
         this.weight = weight;
         this.date = date;
     }
+
+    /**
+     * Backend constructor that creates a WeightLog with current date that it was created
+     * @param weight Weight in Pounds
+     */
     @Ignore
     public WeightLog(float weight){
         this.weight = weight;

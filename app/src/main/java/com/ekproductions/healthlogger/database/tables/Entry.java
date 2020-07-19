@@ -8,11 +8,11 @@ import java.util.Date;
 @Entity(tableName = "entry")
 public class Entry {
     @PrimaryKey (autoGenerate = true)
-    private long id;
-    private Date date;
-    private String description;
-    private int calories;
-    private String entryType;
+    protected long id;
+    protected Date date;
+    protected String description;
+    protected int calories;
+    protected String entryType;
 
     public Entry(long id, Date date, String description, int calories, String entryType) {
         this.id = id;

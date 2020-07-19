@@ -19,10 +19,10 @@ public interface EntryDao {
     @Update
     void updateEntry(Entry entry);
 
-    @Query("SELECT * FROM entry ORDER BY 'date' ASC")
+    @Query("SELECT * FROM entry ORDER BY date ASC")
     List<Entry> getEntries();
 
-    @Query("SELECT * FROM entry ORDER BY 'date' ASC")
+    @Query("SELECT * FROM entry ORDER BY date ASC")
     LiveData<List<Entry>> getEntriesLive();
 
     @Delete

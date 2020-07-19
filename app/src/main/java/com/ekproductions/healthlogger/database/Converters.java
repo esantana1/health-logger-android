@@ -11,21 +11,21 @@ import java.util.Formatter;
 public class Converters {
     @TypeConverter
     public static Date fromTimestamp(Long value) {
-        return value == null ? null : new Date(value);
+        return value == null ? null : new Date(value*1000);
     }
 
     @TypeConverter
     public static Long dateToTimestamp(Date date) {
-        return date == null ? null : date.getTime();
+        return date == null ? null : date.getTime()/1000; //record in seconds
     }
 
-    //TODO
-    public static String dateToTimeStampDateOnly (Date date){
-        ///DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-        //String date
-
-        //return  date == null? null: format.format(date);
-
-    return null;
+    /**
+     * Convert a Date object to a String Representation with date only
+     * @param date Date object to convert string
+     * @return a String date in the YYYY-MM-DD format.
+     */
+    public static String dateToDateOnlyString (Date date){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return  date == null? null: format.format(date);
     }
 }

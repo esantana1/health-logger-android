@@ -26,9 +26,9 @@ public interface DailyNoteDao {
     @Query("DELETE from daily_note")
     void  deleteAll();
 
-    @Query("SELECT * FROM daily_note WHERE date('date') = date(:date) ORDER BY 'date' ASC")
+    @Query("SELECT * FROM daily_note WHERE DATE(date,'unixepoch') = DATE(:date,'unixepoch') ORDER BY 'date' ASC")
     List<DailyNote> getNotesByDate(Date date);
 
-    @Query("SELECT * FROM daily_note WHERE date('date') = date(:date) ORDER BY 'date' ASC")
+    @Query("SELECT * FROM daily_note WHERE DATE(date,'unixepoch') = DATE(:date,'unixepoch') ORDER BY 'date' ASC")
     LiveData<List<DailyNote>> getNotesByDateLive(Date date);
 }

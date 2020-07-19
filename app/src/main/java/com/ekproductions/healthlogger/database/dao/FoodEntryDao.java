@@ -30,13 +30,19 @@ public interface FoodEntryDao {
     @Query("SELECT * FROM food_entry")
     List<FoodEntry> getEntries();
 
-    @Query("SELECT * FROM food_entry WHERE date('date') = date(:date) ORDER BY 'date' ASC")
+    @Query("SELECT * FROM food_entry WHERE DATE(date,'unixepoch') = DATE(:date,'unixepoch') ORDER BY date ASC")
     List<FoodEntry> getEntryByDate(Date date);
 
-    @Query("SELECT * FROM food_entry ORDER BY 'date' ASC" )
+    @Query("SELECT * FROM food_entry ORDER BY date ASC" )
     LiveData<List<FoodEntry>> getEntriesLive();
 
-    @Query("SELECT * FROM food_entry WHERE date('date') = date(:date) ORDER BY 'date' ASC")
+    @Query("SELECT * FROM food_entry WHERE DATE(date,'unixepoch') = DATE(:date,'unixepoch') ORDER BY date ASC")
     LiveData<List<FoodEntry>> getEntryByDateLive(Date date);
+
+    @Query("SELECT * FROM food_entry WHERE DATE(date,'unixepoch') = DATE(:date,'unixepoch') AND :type = entryType ORDER BY date ASC")
+    LiveData<List<FoodEntry>> getEntryByDateAndTypeLive(Date date, String type);
+
+    @Query("SELECT * FROM food_entry WHERE DATE(date,'unixepoch') = DATE(:date,'unixepoch') AND :type = entryType ORDER BY date ASC")
+    List<FoodEntry> getEntryByDateAndType(Date date, String type);
 
 }

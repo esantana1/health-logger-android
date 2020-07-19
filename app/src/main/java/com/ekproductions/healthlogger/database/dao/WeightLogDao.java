@@ -18,13 +18,13 @@ public interface WeightLogDao {
     @Query("SELECT * FROM weight_log ORDER BY date")
     List<WeightLog> getLogs();
 
-    @Query("SELECT * FROM weight_log WHERE DATE('date') = DATE(:date) ORDER BY 'date' ASC")
+    @Query("SELECT * FROM weight_log WHERE DATE(date,'unixepoch') = DATE(:date,'unixepoch') ORDER BY date ASC")
     List<WeightLog> getLogByDate(Date date);
 
-    @Query("SELECT * FROM weight_log ORDER BY 'date' ASC")
+    @Query("SELECT * FROM weight_log ORDER BY date ASC")
     LiveData<List<WeightLog>> getLogsLive();
 
-    @Query("SELECT * FROM weight_log WHERE DATE('date') = DATE(:date) ORDER BY 'date' ASC")
+    @Query("SELECT * FROM weight_log WHERE DATE(date,'unixepoch') = DATE(:date,'unixepoch') ORDER BY date ASC")
     LiveData<List<WeightLog>> getLogByDateLive(Date date);
 
     @Insert

@@ -30,8 +30,6 @@ public class UserSetting {
         this.isFirstTime = true;
     }
 
-    public UserSetting getUserSetting(){return this;}
-
     @NonNull
     public String getUserName() {
         return userName;

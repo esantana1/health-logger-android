@@ -29,15 +29,20 @@ public interface ExerciseEntryDao {
     @Query("SELECT * FROM exercise_entry ORDER BY 'date' ASC")
     List<ExerciseEntry> getEntries();
 
-    @Query("SELECT * FROM exercise_entry WHERE date('date') = date(:date) ORDER BY 'date' ASC")
+    @Query("SELECT * FROM exercise_entry WHERE DATE(date,'unixepoch') = DATE(:date,'unixepoch') ORDER BY 'date' ASC")
     List<ExerciseEntry> getEntryByDate(Date date);
 
     @Query("SELECT * FROM exercise_entry")
     LiveData<List<ExerciseEntry>> getEntriesLive();
 
-    @Query("SELECT * FROM exercise_entry WHERE date('date') = date(:date) ORDER BY 'date' ASC")
+    @Query("SELECT * FROM exercise_entry WHERE DATE(date,'unixepoch') = DATE(:date,'unixepoch') ORDER BY 'date' ASC")
     LiveData<List<ExerciseEntry>> getEntryByDateLive(Date date);
 
+    @Query("SELECT * FROM exercise_entry WHERE DATE(date,'unixepoch') = DATE(:date,'unixepoch') AND :type = entryType ORDER BY 'date' ASC")
+    LiveData<List<ExerciseEntry>> getEntryByDateAndTypeLive(Date date, String type);
+
+    @Query("SELECT * FROM exercise_entry WHERE DATE(date,'unixepoch') = DATE(:date,'unixepoch') AND :type = entryType ORDER BY 'date' ASC")
+    List<ExerciseEntry> getEntryByDateAndType(Date date, String type);
 
 
 }
