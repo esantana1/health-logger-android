@@ -7,6 +7,9 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.ekproductions.healthlogger.database.HealthLoggerRepository;
+import com.ekproductions.healthlogger.database.tables.DailyNote;
+import com.ekproductions.healthlogger.database.tables.ExerciseEntry;
+import com.ekproductions.healthlogger.database.tables.FoodEntry;
 import com.ekproductions.healthlogger.database.tables.UserSetting;
 import com.ekproductions.healthlogger.database.tables.WeightLog;
 
@@ -17,11 +20,37 @@ import java.util.List;
 public class HealthLoggerViewModel extends AndroidViewModel {
     private HealthLoggerRepository repository;
     private UserSetting userSettings;
+    private LiveData<List<WeightLog>> weightLogs;
+    private LiveData<List<ExerciseEntry>> exerciseEntries;
+    private LiveData<List<FoodEntry>> breakfastFoodEntries;
+    private LiveData<List<FoodEntry>> lunchFoodEntries;
+    private LiveData<List<FoodEntry>> snacksFoodEntries;
+    private LiveData<List<FoodEntry>> dinnerFoodEntries;
+    private LiveData<List<DailyNote>> dailyNoteEntries;
+
 
     public HealthLoggerViewModel(@NonNull Application application) {
         super(application);
         repository = new HealthLoggerRepository(application);
         userSettings = repository.getUserSettings();
+
+        Date today = new Date();
+        //initialize logs
+        weightLogs = repository.getWeightLogsLive();
+        exerciseEntries = repository.getExerciseEntriesByDateLive(today);
+        breakfastFoodEntries = repository.getFoodEntriesByDateAndTypeLive(today,"BreakFast");
+        lunchFoodEntries = repository.getFoodEntriesByDateAndTypeLive(today,"Lunch");
+        snacksFoodEntries = repository.getFoodEntriesByDateAndTypeLive(today,"Snacks");
+        dinnerFoodEntries = repository.getFoodEntriesByDateAndTypeLive(today,"Dinner");
+        dailyNoteEntries = repository.getDailyNotesByDateLive(today);
+
+    }
+
+    public void getNextDayEntries(){
+
+    }
+    public  void getPreviousDayEntries(){
+
     }
 
     //User settings model
