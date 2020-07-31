@@ -43,7 +43,8 @@ public class HealthLoggerRepository {
         exerciseEntryDao = db.exerciseEntryDao();
         previousExerciseEntryDao = db.previousExerciseEntryDao();
         previousFoodEntryDao = db.previousFoodEntryDao();
-        settings = userSettingDao.getSettings();
+        //TODO: Calling this in the UI Thread causes problem. Code fix is needed
+      //  settings = userSettingDao.getSettings();
         dailyNoteDao = db.dailyNoteDao();
     }
 

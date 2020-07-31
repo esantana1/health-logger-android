@@ -42,7 +42,7 @@ public abstract class HealthLoggerRoomDatabase extends RoomDatabase {
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    static HealthLoggerRoomDatabase getDatabase(final Context context) {
+    public static HealthLoggerRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (HealthLoggerRoomDatabase.class) {
                 if (INSTANCE == null) {
@@ -59,10 +59,10 @@ public abstract class HealthLoggerRoomDatabase extends RoomDatabase {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-            UserSettingDao settingDao= INSTANCE.settingsDao();
-
-            UserSetting setting = new UserSetting("temp");
-            settingDao.insert(setting);
+//            UserSettingDao settingDao= INSTANCE.settingsDao();
+//
+//            UserSetting setting = new UserSetting("temp");
+//            settingDao.insert(setting);
 
         }
     };
