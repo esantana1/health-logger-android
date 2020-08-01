@@ -1,11 +1,13 @@
 package com.ekproductions.healthlogger.ui.dashboard;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -21,13 +23,17 @@ import com.ekproductions.healthlogger.R;
 import com.ekproductions.healthlogger.database.HealthLoggerViewModel;
 import com.ekproductions.healthlogger.database.tables.FoodEntry;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class DashboardFragment extends Fragment {
 
    // private DashboardViewModel dashboardViewModel;
 
     private HealthLoggerViewModelCopy dashboardViewModel;
+    private int totalBreakFastCalories;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         //Eric's Try & Catch
@@ -69,6 +75,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onChanged(List<FoodEntry> foodEntries) {
                 adapter.setFoodEntries(foodEntries);
+                updateTotal(root, adapter.getTotalBreakFastCalories());
             }
         });
 
@@ -77,14 +84,47 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 dashboardViewModel.insertFoodEntry();
+
             }
         });
 
+        TextView dayTextView = root.findViewById(R.id.dayText);
+        dayTextView.setText("Today");
+
+        dayTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(
+                        root.getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                myCalendar.set(Calendar.YEAR, year);
+                                myCalendar.set(Calendar.MONTH, month);
+                                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                                String myFormat = "MM/dd/yy"; //In which you need put here
+                                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                                dayTextView.setText(sdf.format(myCalendar.getTime()));
+                            }
+                        },
+                        myCalendar.get(Calendar.YEAR),
+                        myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+
+
+            }
+        });
 
         return root;
     }
+    final Calendar myCalendar = Calendar.getInstance();
 
-
+    private void updateTotal(View root, int totalCalories) {
+        TextView total = root.findViewById(R.id.textView9);
+        total.setText("Total Calories: "+ totalCalories);
+    }
 
 
     public void insertFood(View v){

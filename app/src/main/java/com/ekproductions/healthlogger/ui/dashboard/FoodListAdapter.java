@@ -2,18 +2,21 @@ package com.ekproductions.healthlogger.ui.dashboard;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ekproductions.healthlogger.ProtoTypeMainActivity;
 import com.ekproductions.healthlogger.R;
+import com.ekproductions.healthlogger.database.Converters;
 import com.ekproductions.healthlogger.database.tables.FoodEntry;
 
 import org.w3c.dom.Text;
@@ -36,6 +39,7 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodVi
 
     private final LayoutInflater inflater;
     List<FoodEntry> items;
+    int totalCalories;
 
     public FoodListAdapter(Context context) {
         this.inflater = LayoutInflater.from(context);
@@ -65,6 +69,40 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodVi
                 }
             });
 
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+
+                    // Use the Builder class for convenient dialog construction
+                    AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
+                    builder.setMessage(
+                            "Description: " +current.getDescription()+"\n"+
+                            "Calories: "+current.getCalories()+"\n"+
+                            "FoodType: "+ current.getEntryType()+"\n"+
+                            "Carbs: " + current.getCarbohydrates()+"\n"+
+                            "Fat: "+current.getFat()+"\n"+
+                            "Date: " + Converters.dateToDateOnlyString( current.getDate()))
+                            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    int index = holder.getAdapterPosition();
+                                    FoodEntry current = items.get(index);
+                                    HealthLoggerViewModelCopy model = new ViewModelProvider((ProtoTypeMainActivity) holder.itemView.getContext()).get(HealthLoggerViewModelCopy.class);
+                                    model.deleteFoodEntry(current);
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // User cancelled the dialog
+                                }
+                            });
+                    builder.show().show();
+
+
+                    return true;
+                }
+            });
+
 
         }
         else{
@@ -75,7 +113,17 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.FoodVi
 
     void setFoodEntries (List<FoodEntry> entries){
         items = entries;
+        totalCalories = getTotalBreakFastCalories();
+
         notifyDataSetChanged();
+    }
+
+    public int getTotalBreakFastCalories() {
+        totalCalories =0;
+     for(FoodEntry item: items){
+         totalCalories+=item.getCalories();
+     }
+     return totalCalories;
     }
 
     @Override

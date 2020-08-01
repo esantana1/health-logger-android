@@ -20,12 +20,42 @@
         android:textAlignment="center"
         android:textSize="35sp" />
 
-    <CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="394dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="12dp"
-        android:clickable="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_weight="0"
+            android:text="Previous"
+            android:background="@drawable/ripple"
+            android:clickable="true"/>
+
+        <TextView
+            android:id="@+id/dayText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center_horizontal|center_vertical"
+            android:textAlignment="center"
+            android:text="TextView"
+            android:background="@drawable/ripple"/>
+
+        <TextView
+            android:clickable="true"
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="0"
+            android:text="Next"
+            android:background="@drawable/ripple"/>
+    </LinearLayout>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
