@@ -1,5 +1,6 @@
 package com.ekproductions.healthlogger.ui.dashboard;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -79,11 +81,13 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+
+
         Button breakFastButton = root.findViewById(R.id.button11);
         breakFastButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dashboardViewModel.insertFoodEntry();
+                dashboardViewModel.insertFoodEntry(myCalendar);
 
             }
         });
@@ -103,6 +107,7 @@ public class DashboardFragment extends Fragment {
                                 myCalendar.set(Calendar.MONTH, month);
                                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
+                                updateDataBaseQueryDate(getActivity(),adapter,dashboardViewModel,root);
                                 String myFormat = "MM/dd/yy"; //In which you need put here
                                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
@@ -114,11 +119,57 @@ public class DashboardFragment extends Fragment {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
 
 
+
+            }
+        });
+
+
+        //Next and Prevoius on click actions
+
+        TextView next = root.findViewById(R.id.textView12);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myCalendar.add(Calendar.DATE, 1);
+
+                String myFormat = "MM/dd/yy"; //In which you need put here
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                dayTextView.setText(sdf.format(myCalendar.getTime()));
+
+                updateDataBaseQueryDate(getActivity(),adapter,dashboardViewModel,root);
+            }
+        });
+
+        TextView prev = root.findViewById(R.id.textView11);
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myCalendar.add(Calendar.DATE, -1);
+
+                String myFormat = "MM/dd/yy"; //In which you need put here
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+                dayTextView.setText(sdf.format(myCalendar.getTime()));
+
+                updateDataBaseQueryDate(getActivity(),adapter,dashboardViewModel,root);
             }
         });
 
         return root;
     }
+
+    void updateDataBaseQueryDate(Activity activity, FoodListAdapter adapter, HealthLoggerViewModelCopy model, View view){
+        model.getBreakFastFoodEntries().removeObservers((LifecycleOwner) activity);
+        model.updateByDate(myCalendar).observe((LifecycleOwner) activity, new Observer<List<FoodEntry>>() {
+            @Override
+            public void onChanged(List<FoodEntry> foodEntries) {
+                adapter.setFoodEntries(foodEntries);
+                updateTotal(view, adapter.getTotalBreakFastCalories());
+            }
+        });
+    }
+
     final Calendar myCalendar = Calendar.getInstance();
 
     private void updateTotal(View root, int totalCalories) {
@@ -128,6 +179,6 @@ public class DashboardFragment extends Fragment {
 
 
     public void insertFood(View v){
-        dashboardViewModel.insertFoodEntry();
+        dashboardViewModel.insertFoodEntry(myCalendar);
     }
 }

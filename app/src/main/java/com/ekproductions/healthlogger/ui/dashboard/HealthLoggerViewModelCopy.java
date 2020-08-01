@@ -14,6 +14,7 @@ import com.ekproductions.healthlogger.database.tables.FoodEntry;
 import com.ekproductions.healthlogger.database.tables.UserSetting;
 import com.ekproductions.healthlogger.database.tables.WeightLog;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -64,8 +65,17 @@ public class HealthLoggerViewModelCopy extends AndroidViewModel {
         return breakfastFoodEntries;
     }
 
-    public void insertFoodEntry(){
-     repository.insertFoodEntry(new FoodEntry(new Date(), "Food" + ++counter, 100, "BreakFast",0,0,0) );
+    public LiveData<List<FoodEntry>>  updateByDate(Calendar calendar){
+        breakfastFoodEntries = repository.getFoodEntriesByDateAndTypeLive(calendar.getTime(),"BreakFast");
+        this.breakfastFoodEntries = breakfastFoodEntries;
+        return  breakfastFoodEntries;
+    }
+    public void updatePreviousDate(Calendar calendar){
+
+    }
+
+    public void insertFoodEntry(Calendar calendar){
+     repository.insertFoodEntry(new FoodEntry(calendar.getTime(), "Food" + ++counter, 100, "BreakFast",0,0,0) );
     }
     //-----------------
     public void getNextDayEntries(){
