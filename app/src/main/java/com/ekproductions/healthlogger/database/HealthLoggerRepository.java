@@ -43,8 +43,11 @@ public class HealthLoggerRepository {
         exerciseEntryDao = db.exerciseEntryDao();
         previousExerciseEntryDao = db.previousExerciseEntryDao();
         previousFoodEntryDao = db.previousFoodEntryDao();
-        settings = userSettingDao.getSettings();
         dailyNoteDao = db.dailyNoteDao();
+        //Run a different thread to get user settings in order for
+        // the repository can be initialized in a UI Thread.
+        HealthLoggerRoomDatabase.databaseWriteExecutor.execute(() ->
+                settings = userSettingDao.getSettings());
     }
 
     //User Settings methods
@@ -54,6 +57,11 @@ public class HealthLoggerRepository {
      * @return an UserSetting representing what is stored in the database.
      */
     public UserSetting getUserSettings() {
+        //Wait for settings to be initialized from a
+        //different thread initiated in constructor
+        while(settings == null)
+            continue;
+
         // There is only one record in the settings table
         if (settings.size() > 0) {
             return settings.get(0);
