@@ -29,6 +29,8 @@ public class HealthLoggerViewModelCopy extends AndroidViewModel {
     private LiveData<List<FoodEntry>> dinnerFoodEntries;
     private LiveData<List<DailyNote>> dailyNoteEntries;
 
+    private int counter;
+
 
     public HealthLoggerViewModelCopy(@NonNull Application application) {
         super(application);
@@ -63,7 +65,7 @@ public class HealthLoggerViewModelCopy extends AndroidViewModel {
     }
 
     public void insertFoodEntry(){
-     repository.insertFoodEntry(new FoodEntry(new Date(), "Food", 100, "BreakFast",0,0,0) );
+     repository.insertFoodEntry(new FoodEntry(new Date(), "Food" + ++counter, 100, "BreakFast",0,0,0) );
     }
     //-----------------
     public void getNextDayEntries(){
@@ -106,6 +108,10 @@ public class HealthLoggerViewModelCopy extends AndroidViewModel {
     public void insertWeightLog(WeightLog log){ repository.insertWeightLog(log);}
     public void updateWeightLog (WeightLog log){repository.updateWeightLog(log);}
     public  void deleteWeightLog(WeightLog log){repository.deleteWeightLog(log);}
+
+    public void deleteFoodEntry(FoodEntry current) {
+        repository.deleteFoodEntry(current);
+    }
 
     //TODO: DailyNote model
     //TODO: ExcerciseEntry
